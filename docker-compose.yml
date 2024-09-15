@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_DB: bettergram
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - bettergram_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d bettergram"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_DSN=postgres://user:password@db:5432/bettergram?sslmode=disable
+      - UPLOAD_DIR=/uploads
+    volumes:
+      - ./uploads:/uploads
+
+  migrate:
+    image: migrate/migrate
+    volumes:
+      - ./migrations:/migrations
+    command: ["-path", "/migrations", "-database", "postgres://user:password@db:5432/bettergram?sslmode=disable", "up"]
+    depends_on:
+      db:
+        condition: service_healthy
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8080:8080"
+    environment:
+      - SWAGGER_JSON=/spec/spec.json
+      - NODE_ENV=production
+    volumes:
+      - ./:/spec
+    depends_on:
+      - app
+volumes:
+  bettergram_data:

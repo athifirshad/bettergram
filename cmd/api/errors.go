@@ -60,3 +60,7 @@ func (app *application) failedValidation(w http.ResponseWriter, r *http.Request,
 		app.serverError(w, r, err)
 	}
 }
+func (app *application) invalidAuthenticationToken(w http.ResponseWriter, r *http.Request) {
+	message := "Invalid or missing authentication token"
+	app.errorMessage(w, r, http.StatusUnauthorized, message, nil)
+}

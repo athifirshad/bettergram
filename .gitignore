@@ -1,4 +1,5 @@
 *.env
-README.md
+uploads/*
+!uploads/.gitkeep
 README.html
 LICENSE
