@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS photos;
+DROP EXTENSION IF EXISTS "uuid-ossp";

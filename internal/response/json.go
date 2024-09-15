@@ -27,3 +27,24 @@ func JSONWithHeaders(w http.ResponseWriter, status int, data any, headers http.H
 
 	return nil
 }
+
+// ErrorResponse represents the structure of an error response
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+// BadRequest sends a 400 Bad Request response with the given error
+func BadRequest(w http.ResponseWriter, r *http.Request, err error) {
+	JSON(w, http.StatusBadRequest, ErrorResponse{Error: err.Error()})
+}
+
+// ServerError sends a 500 Internal Server Error response
+func ServerError(w http.ResponseWriter, r *http.Request, err error) {
+	// In a production environment, you might want to log the error here
+	JSON(w, http.StatusInternalServerError, ErrorResponse{Error: "internal server error"})
+}
+
+// InvalidCredentials sends a 401 Unauthorized response for invalid credentials
+func InvalidCredentials(w http.ResponseWriter, r *http.Request) {
+	JSON(w, http.StatusUnauthorized, ErrorResponse{Error: "invalid credentials"})
+}

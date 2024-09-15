@@ -8,8 +8,8 @@ import (
 	"runtime/debug"
 	"sync"
 
+	"athifirshad.com/bettergram/internal/data"
 	"athifirshad.com/bettergram/internal/database"
-	"athifirshad.com/bettergram/internal/version"
 
 	"github.com/lmittmann/tint"
 )
@@ -38,22 +38,20 @@ type application struct {
 	db     *database.DB
 	logger *slog.Logger
 	wg     sync.WaitGroup
+	data   data.Models
 }
 
 func run(logger *slog.Logger) error {
 	var cfg config
 
-	flag.StringVar(&cfg.baseURL, "base-url", "http://localhost:4444", "base URL for the application")
-	flag.IntVar(&cfg.httpPort, "http-port", 4444, "port to listen on for HTTP requests")
-	flag.StringVar(&cfg.db.dsn, "db-dsn", "user:pass@localhost:5432/db", "postgreSQL DSN")
-
-	showVersion := flag.Bool("version", false, "display version and exit")
+	flag.StringVar(&cfg.baseURL, "base-url", "http://localhost:4000", "base URL for the application")
+	flag.IntVar(&cfg.httpPort, "http-port", 4000, "port to listen on for HTTP requests")
 
 	flag.Parse()
 
-	if *showVersion {
-		fmt.Printf("version: %s\n", version.Get())
-		return nil
+	cfg.db.dsn = os.Getenv("DB_DSN")
+	if cfg.db.dsn == "" {
+		return fmt.Errorf("DB_DSN environment variable is not set")
 	}
 
 	db, err := database.New(cfg.db.dsn)
@@ -66,6 +64,7 @@ func run(logger *slog.Logger) error {
 		config: cfg,
 		db:     db,
 		logger: logger,
+		data:   data.NewModels(db.Pool),
 	}
 
 	return app.serveHTTP()
