@@ -68,6 +68,7 @@ func (app *application) uploadPhoto(w http.ResponseWriter, r *http.Request) {
 
 	photo := &data.Photo{
 		UserID:   user.ID,
+		Username: user.Username,
 		PhotoURL: "/uploads/" + filename,
 		Caption:  caption,
 	}

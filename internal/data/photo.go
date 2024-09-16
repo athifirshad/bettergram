@@ -35,28 +35,29 @@ func (m PhotoModel) Insert(photo *Photo) error {
 }
 
 func (m PhotoModel) GetByID(id uuid.UUID) (*Photo, error) {
-	query := `
-		SELECT id, user_id, photo_url, caption, created_at
-		FROM photos
-		WHERE id = $1`
+    query := `
+        SELECT p.id, p.user_id, u.username, p.photo_url, p.caption, p.created_at
+        FROM photos p
+        JOIN users u ON p.user_id = u.id
+        WHERE p.id = $1`
 
-	var photo Photo
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
+    var photo Photo
+    ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+    defer cancel()
 
-	err := m.DB.QueryRow(ctx, query, id).Scan(
-		&photo.ID,
-		&photo.UserID,
-		&photo.PhotoURL,
-		&photo.Caption,
-		&photo.CreatedAt,
-	)
-	if err != nil {
-		return nil, err
-	}
-	return &photo, nil
+    err := m.DB.QueryRow(ctx, query, id).Scan(
+        &photo.ID,
+        &photo.UserID,
+        &photo.Username,
+        &photo.PhotoURL,
+        &photo.Caption,
+        &photo.CreatedAt,
+    )
+    if err != nil {
+        return nil, err
+    }
+    return &photo, nil
 }
-
 func (m PhotoModel) GetByUserID(userID int64) ([]*Photo, error) {
     query := `
         SELECT p.id, p.user_id, u.username, p.photo_url, p.caption, p.created_at

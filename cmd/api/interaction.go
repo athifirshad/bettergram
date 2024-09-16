@@ -95,6 +95,7 @@ func (app *application) addComment(w http.ResponseWriter, r *http.Request) {
 	comment := &data.Comment{
 		PhotoID: photoID,
 		UserID:  user.ID,
+		Username: user.Username, 
 		Content: input.Content,
 	}
 
