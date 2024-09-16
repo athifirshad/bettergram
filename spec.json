@@ -484,18 +484,23 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64",
+            "description": "Unique identifier for the user"
           },
           "username": {
-            "type": "string"
+            "type": "string",
+            "description": "User's chosen username"
           },
           "email": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "description": "User's email address"
           },
           "created_at": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Timestamp of when the user account was created"
           }
         }
       },
@@ -504,23 +509,30 @@
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "description": "Unique identifier for the photo"
           },
           "user_id": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the user who uploaded the photo"
           },
           "username": {
-            "type": "string"
+            "type": "string",
+            "description": "Username of the user who uploaded the photo"
           },
           "photo_url": {
-            "type": "string"
+            "type": "string",
+            "description": "URL of the uploaded photo"
           },
           "caption": {
-            "type": "string"
+            "type": "string",
+            "description": "Optional caption for the photo"
           },
           "created_at": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Timestamp of when the photo was uploaded"
           }
         }
       },
@@ -529,21 +541,56 @@
         "properties": {
           "id": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "description": "Unique identifier for the comment"
           },
           "photo_id": {
             "type": "string",
-            "format": "uuid"
+            "format": "uuid",
+            "description": "ID of the photo the comment belongs to"
           },
           "user_id": {
-            "type": "integer"
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the user who made the comment"
+          },
+          "username": {
+            "type": "string",
+            "description": "Username of the user who made the comment"
           },
           "content": {
-            "type": "string"
+            "type": "string",
+            "description": "Content of the comment"
           },
           "created_at": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "description": "Timestamp of when the comment was created"
+          }
+        }
+      },
+      "Like": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique identifier for the like"
+          },
+          "photo_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID of the photo that was liked"
+          },
+          "user_id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID of the user who liked the photo"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp of when the like was created"
           }
         }
       }

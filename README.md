@@ -72,6 +72,62 @@ This command will:
 
 The API is documented using OpenAPI 3.0 and Swagger UI. Once the application is running, navigate to [http://localhost:8080](http://localhost:8080) to explore the API endpoints interactively.
 
+## API Routes
+
+### User Management
+- `POST /users`: Register a new user
+  - Request body: `{ "username": string, "email": string, "password": string }`
+  - Response: User object
+
+- `POST /users/login`: Login user
+  - Request body: `{ "email": string, "password": string }`
+  - Response: Authentication token
+
+- `GET /users/profile`: Get user profile (requires authentication)
+  - Response: User object
+
+### Photo Management
+- `POST /photos`: Upload a new photo (requires authentication)
+  - Request body: Multipart form data with "photo" file and "caption" text
+  - Response: Photo object
+
+- `GET /photos`: Get all photos
+  - Response: Array of Photo objects
+
+- `GET /photos/{id}`: Get a specific photo
+  - Response: Photo object
+
+- `GET /users/photos`: Get photos of the authenticated user (requires authentication)
+  - Response: Array of Photo objects
+
+- `GET /photos/search`: Search photos
+  - Query parameter: `q` (search query)
+  - Response: Array of Photo objects
+
+### Interactions
+- `POST /photos/{id}/like`: Like a photo (requires authentication)
+  - Response: Like object
+
+- `DELETE /photos/{id}/like`: Unlike a photo (requires authentication)
+  - Response: No content
+
+- `POST /photos/{id}/comments`: Add a comment to a photo (requires authentication)
+  - Request body: `{ "content": string }`
+  - Response: Comment object
+
+- `GET /photos/{id}/comments`: Get comments for a photo
+  - Response: Array of Comment objects
+
+### Authentication
+- `POST /tokens`: Create authentication token
+  - Request body: `{ "email": string, "password": string }`
+  - Response: Authentication token
+
+### Miscellaneous
+- `GET /status`: Get API status
+  - Response: Status object
+
+
 ## Project Structure
 
 The project is organized as follows:
